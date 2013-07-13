@@ -106,9 +106,58 @@ Throughout this book we will write tests for our app before we write the functio
 
 # Getting set up
 
-## Folders
+## Gem dependencies
 
-## 
+Create a Gemfile with this contents:
+
+~~~~~~~~
+source 'https://rubygems.org'
+
+gem 'sinatra'
+gem 'mongoid'
+gem 'mongoid_auto_increment_id'
+
+group :test do
+  gem 'minitest'
+end
+~~~~~~~~
+
+Create a config.ru file (this will run your app):
+
+~~~~~~~~
+require 'bundler'
+require './blog.rb'
+
+map '/api/v1/' do
+ run Blog.new
+end
+~~~~~~~~
+
+Here we're using `map '/api/v1/article/'` to serve our API at that base path.
+
+Now, create blog.rb:
+
+~~~~~~~~
+require 'rubygems'
+require 'sinatra/base'
+require 'mongoid'
+require './article.rb'
+
+class Blog < Sinatra::Base
+
+  Mongoid.load!('./config/mongoid.yml')
+
+  get '/', :provides => :json do
+    { 
+      title: 'First blog post!',
+      content: 'This is a blog post and I like it it is great this is fun.' 
+    }.to_json
+  end 
+
+end
+~~~~~~~~
+
+This code just gets us started. So far we're not really interacting with the database yet, but it gives you a sense of what it takes to send json as a response to a get request. And note that while this says `get '/'`, our app will respond to get requests at `/api/v1/` because of how we mapped the requests for this app.
 
 # Articles
 ## Creating the article model in sinatra
