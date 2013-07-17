@@ -162,6 +162,24 @@ This code just gets us started. So far we're not really interacting with the dat
 # Articles
 ## Creating the article model in sinatra
 
+Create the article.rb file.
+
+~~~~~~~~
+class Article
+  include Mongoid::Document
+  include Mongoid::Timestamps
+  include Mongoid::Slug
+
+  field :title, type: String
+  field :content, type: String
+  field :main_image_url, type: String
+  slug :title
+
+  has_and_belongs_to_many :tags
+  has_and_belongs_to_many :users
+end
+~~~~~~~~
+
 ## Creating the article model, collection, and views in backbone
 
 
